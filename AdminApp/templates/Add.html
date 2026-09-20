@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Book</title>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+  <style>
+     :root {
+        --bg: #f5f7fb;
+        --text: #102028;
+        --muted: #6b7280;
+        --card: #ffffff;
+        --sidebar-bg: #0f1724;
+        --accent-start: #7b4397;
+        --accent-end: #dc2430;
+        }
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f7fb;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .addBookForm {
+      position: relative;
+      width: 600px;
+      max-width: 100%;
+      max-height: 90%;
+      overflow-y: auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 8px 24px rgba(2, 6, 23, 0.3);
+    }
+
+    .addBookForm h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      margin-bottom: 5px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    .submit-btn {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: 20px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      color: #555;
+    }
+
+    @media (max-width: 480px) {
+      .addBookForm {
+        padding: 20px;
+      }
+      .form-group input {
+        font-size: 0.9rem;
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="overlay">
+    <div class="addBookForm">
+      <button class="close-btn" onclick="window.history.back()">&times;</button>
+      <h2>Add New Book</h2>
+
+      <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label>Book ID</label>
+          <input type="text" name="Book_Id" required>
+        </div>
+
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" name="Title" required>
+        </div>
+
+        <div class="form-group">
+          <label>Author</label>
+          <input type="text" name="Author" required>
+        </div>
+
+        <div class="form-group">
+          <label>Published Year</label>
+          <input type="number" name="Published_Year" required>
+        </div>
+
+        <div class="form-group">
+          <label>ISBN</label>
+          <input type="text" name="ISBN" required>
+        </div>
+
+        <div class="form-group">
+          <label>Total Copies</label>
+          <input type="number" name="Total_Copies" required>
+        </div>
+
+        <div class="form-group">
+          <label>Available Copies</label>
+          <input type="number" name="Available_Copies" required>
+        </div>
+
+        <div class="form-group">
+          <label>Category</label>
+          <input type="text" name="Category" required>
+        </div>
+
+        <div class="form-group">
+          <label>Edition</label>
+          <input type="text" name="Edition" required>
+        </div>
+        <div class="form-group">
+          <label>Photo</label>
+          <input type="file" name="Image" accept="Image/*" required>
+        </div>
+
+        <button type="submit" class="submit-btn">Add Book</button>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Analytics</title>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        /* Dark mode toggle switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--accent-start);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+
+        /* ---------- Theme variables ---------- */
+        :root {
+            --bg: #f5f7fb;
+            --text: #102028;
+            --muted: #6b7280;
+            --card: #ffffff;
+            --sidebar-bg: #0f1724;
+            --accent-start: #7b4397;
+            --accent-end: #dc2430;
+            --sidebar-width: 240px;
+            --sidebar-collapsed: 70px;
+            --glass: rgba(255, 255, 255, 0.06);
+        }
+
+        :root[data-theme='dark'] {
+            --bg: #071021;
+            --text: #e6eef8;
+            --muted: #9aa7bf;
+            --card: #0b1220;
+            --sidebar-bg: #081222;
+            --glass: rgba(255, 255, 255, 0.02);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ---------------- Sidebar ---------------- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--sidebar-bg), #0b1220);
+            color: #fff;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: width .25s ease;
+            box-shadow: 2px 0 8px rgba(2, 6, 23, 0.15);
+            overflow: visible;
+            z-index: 50;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed);
+        }
+
+        .sidebar.hovered {
+            width: var(--sidebar-width);
+        }
+
+        .sidebar .top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .brand {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 12px 8px;
+            margin: 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin: 6px 6px;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar.collapsed .nav-text {
+            opacity: 0;
+            transform: translateX(-6px);
+            pointer-events: none;
+        }
+
+        .sidebar.collapsed .brand {
+            display: none;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+        }
+
+        /* ---------------- Main content ---------------- */
+        .main {
+            margin-left: var(--sidebar-width);
+            transition: margin-left .25s ease;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.collapsed~.main {
+            margin-left: var(--sidebar-collapsed);
+        }
+
+        header.topbar {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid rgba(15, 20, 30, 0.04);
+        }
+
+        .page-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* profile dropdown */
+        .profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 8px;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            display: grid;
+            place-items: center;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .profile-info #adminName {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .profile-info small {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            right: 0;
+            top: 56px;
+            min-width: 220px;
+            background: var(--card);
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(2, 6, 23, 0.18);
+            display: none;
+            flex-direction: column;
+        }
+
+        .profile-dropdown.open {
+            display: flex;
+        }
+
+        .profile-dropdown a,
+        .profile-dropdown .row {
+            padding: 12px 14px;
+            text-decoration: none;
+            color: var(--text);
+            border-bottom: 1px solid rgba(2, 6, 23, 0.04);
+        }
+
+        .profile-dropdown a:hover {
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            color: #fff;
+        }
+
+        /* workspace */
+        main#content {
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .workspace {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
+        }
+
+        /* Styling for pie graphs */
+
+        .analytics-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            padding: 20px;
+            justify-items: center;
+
+            
+            overflow-y: auto;
+            max-height: calc(100vh - 100px);
+            
+            padding-bottom: 60px;
+        }
+
+        
+        .analytics-cards .card {
+            width: 100%;
+            min-height: 240px;
+            background: var(--card);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        
+        .analytics-cards .card:last-child {
+            grid-column: 1 / span 2;
+            justify-self: center;
+            width: 60%;
+        }
+
+        .analytics-cards .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(2, 6, 23, 0.12);
+        }
+
+        
+        .analytics-cards::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .analytics-cards::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="sidebar">
+        <div class="top">
+            <div class="brand">LMS Admin</div>
+        </div>
+        <ul class="nav-list" id="navList">
+            <li class="nav-item " data-page="dashboard"><i class="bi bi-speedometer2"></i><span class="nav-text"><a
+                        style="color: white; text-decoration: none;" href="{% url 'AdminApp:dashboard' %}">Dashboard</a></span></li>
+            <li class="nav-item active" data-page="analytics"><i class="bi bi-graph-up"></i><span class="nav-text"><a
+                        style="color: white; text-decoration: none;" href="analytics.html">Analytics</a></span>
+            </li>
+            <li class="nav-item" data-page="books"><i class="bi bi-journal-bookmark"></i><span class="nav-text"><a
+                        style="color: white; text-decoration: none;" href="{% url 'AdminApp:books' %}">Books</a></span>
+            </li>
+            <li class="nav-item" data-page="members"><i class="bi bi-people"></i><span class="nav-text"><a
+                        style="color: white; text-decoration: none;" href="{% url 'AdminApp:members' %}">Members</a></span>
+            </li>
+            <li class="nav-item" data-page="requests"><i class="bi bi-inbox"></i><span class="nav-text"><a
+                        style="color: white; text-decoration: none;" href="{% url 'AdminApp:requests' %}">Requests</a></span>
+            </li>
+            <li class="nav-item" data-page="history"><i class="bi bi-clock-history"></i><span class="nav-text"><a
+                        style="color: white; text-decoration: none;" href="{% url 'AdminApp:history' %}">History</a></span>
+            </li>
+            <li class="nav-item" data-page="ledger"><i class="bi bi-receipt"></i><span class="nav-text"><a
+                        style="color: white; text-decoration: none;" href="{% url 'AdminApp:ledger' %}">Ledger</a></span>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- MAIN AREA -->
+    <div class="main">
+        <header class="topbar">
+            <div class="left">
+                <h1 class="page-title" id="pageTitle">Analytics</h1>
+            </div>
+
+            <div class="right" style="display:flex;align-items:center;gap:12px;">
+                <div class="profile" id="profile">
+                    <div id="profileBtn" class="profile-btn" aria-haspopup="true" aria-expanded="false">
+                        <div class="avatar">A</div>
+                        <div class="profile-info">
+                            <div id="adminName">Admin</div>
+                            <small id="adminRole">Administrator</small>
+                        </div>
+                        <i class="bi bi-chevron-down"></i>
+                    </div>
+
+                    <div id="profileDropdown" class="profile-dropdown" role="menu">
+                        <a href="#" role="menuitem">Profile</a>
+                        <div class="row">
+                            <span>Appearance</span>
+                            <label class="switch" title="Toggle dark mode">
+                                <input type="checkbox" id="themeToggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <a href="#" id="signout">Sign Out</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!--Analytics Area-->
+        <main id="content">
+        <section class="workspace">
+          <div class="charts-container" id="chartsContainer">
+            <div class="chart-box card" id="booksCategoryChart">
+              {{ books_category_plot|safe }}
+            </div>
+            <div class="chart-box card" id="booksYearChart">
+              {{ books_year_plot|safe }}
+            </div>
+            <div class="chart-box card" id="booksAvailabilityChart">
+              {{ books_availability_plot|safe }}
+            </div>
+            <div class="chart-box card" id="requestsBookChart">
+              {{ requests_book_plot|safe }}
+            </div>
+            <div class="chart-box card" id="ledgerChartBox">
+              {{ ledger_plot|safe }}
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('change', () => {
+            if (themeToggle.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+        });
+
+
+        const profileBtn = document.getElementById('profileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const profileWrap = document.getElementById('profile');
+
+        profileBtn.addEventListener('click', () => { profileDropdown.classList.toggle('open'); });
+        document.addEventListener('click', (e) => { if (!profileWrap.contains(e.target)) profileDropdown.classList.remove('open'); });
+
+        // Animated counters
+        document.querySelectorAll(".circle").forEach(circle => {
+            let target = +circle.getAttribute("data-target"), count = 0, speed = target / 100;
+            let update = setInterval(() => { count += speed; if (count >= target) { count = target; clearInterval(update); } circle.textContent = Math.floor(count); }, 20);
+        });
+
+        // Carousel scroll
+        function scrollCarousel(btn, dir) {
+            const c = btn.parentElement.querySelector('.carousel');
+            c.scrollBy({ left: dir * 200, behavior: 'smooth' });
+        }
+
+
+    </script>
+</body>
+
+</html>

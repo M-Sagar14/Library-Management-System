@@ -1,0 +1,153 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/adminapp/dashboard.css' %}">
+</head>
+
+<body>
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar">
+    <div class="top">
+      <div class="brand">LMS Admin</div>
+    </div>
+    <ul class="nav-list" id="navList">
+      <li class="nav-item active" data-page="dashboard"><i class="bi bi-speedometer2"></i><span
+          class="nav-text">Dashboard</span></li>
+      <li class="nav-item" data-page="analytics"><i class="bi bi-graph-up"></i><span class="nav-text"><a href="{% url 'AdminApp:analytics' %}" style="text-decoration: none;  color: white;">Analytics</a></span>
+      </li>
+      <li class="nav-item" data-page="books"><i class="bi bi-journal-bookmark"></i><span class="nav-text"> <a href="{% url 'AdminApp:books' %}" style="text-decoration: none;  color: white;">Books</a></span>
+      </li>
+      <li class="nav-item" data-page="members"><i class="bi bi-people"></i><span class="nav-text"><a href="{% url 'AdminApp:members' %}" style="text-decoration: none; color: white;">Members </a></span>
+      </li>
+      <li class="nav-item" data-page="requests"><i class="bi bi-inbox"></i><span class="nav-text"> <a href="{% url 'AdminApp:requests' %}" style="text-decoration: none; color: white;">Requests </a></span>
+      </li>
+      <li class="nav-item" data-page="history"><i class="bi bi-clock-history"></i><span class="nav-text"> <a href="{% url 'AdminApp:history' %}" style="text-decoration: none; color: white;">History</a></span>
+      </li>
+      <li class="nav-item" data-page="ledger"><i class="bi bi-receipt"></i><span class="nav-text"> <a href="{% url 'AdminApp:ledger' %}" style="text-decoration: none; color: white;">Ledger</a></span>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <div class="main">
+    <header class="topbar">
+      <div class="left">
+        <h1 class="page-title" id="pageTitle">Dashboard</h1>
+      </div>
+
+      <div class="right" style="display:flex;align-items:center;gap:12px;">
+        <div class="profile" id="profile">
+          <div id="profileBtn" class="profile-btn" aria-haspopup="true" aria-expanded="false">
+            <div class="avatar">A</div>
+            <div class="profile-info">
+              <div id="adminName">Admin</div>
+              <small id="adminRole">Administrator</small>
+            </div>
+            <i class="bi bi-chevron-down"></i>
+          </div>
+
+          <div id="profileDropdown" class="profile-dropdown" role="menu">
+            <a href="#" role="menuitem">Profile</a>
+            <a href="{% url 'AdminApp:change_password' %}">Change Password</a>
+            <div class="row">
+              <span>Appearance</span>
+              <label class="switch" title="Toggle dark mode">
+                <input type="checkbox" id="themeToggle">
+                <span class="slider"></span>
+              </label>
+
+            </div>
+            <a href="{% url 'AdminApp:logout' %}" id="signout">Sign Out</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="content">
+      <!-- Dashboard Circles -->
+      <div class="stats">
+        <div class="circle-card">
+          <div class="circle" data-target="{{books}}">{{books}}</div>
+          <div class="label">Total Books</div>
+        </div>
+        <div class="circle-card">
+          <div class="circle" data-target="15">0</div>
+          <div class="label">Total Fines</div>
+        </div>
+        <div class="circle-card">
+          <div class="circle" data-target="8">0</div>
+          <div class="label">Book Requests</div>
+        </div>
+        <div class="circle-card">
+          <div class="circle" data-target="45">0</div>
+          <div class="label">Issued Books</div>
+        </div>
+        <div class="circle-card">
+          <div class="circle" data-target="6">0</div>
+          <div class="label">Overdue</div>
+        </div>
+        <div class="circle-card">
+          <div class="circle" data-target="{{users}}">{{users}}</div>
+          <div class="label">Total Members</div>
+        </div>
+      </div>
+
+      <!-- Featured Books -->
+      <div class="featured-section">
+        <h2>Featured Books</h2>
+        <div class="carousel-container">
+          <button class="scroll-btn scroll-left" onclick="scrollCarousel(this,-1)">&#8249;</button>
+          <div class="carousel">
+            <a href="#" class="book">Book 1</a>
+            <a href="#" class="book">Book 2</a>
+            <a href="#" class="book">Book 3</a>
+            <a href="#" class="book">Book 4</a>
+            <a href="#" class="book">Book 5</a>
+          </div>
+          <button class="scroll-btn scroll-right" onclick="scrollCarousel(this,1)">&#8250;</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('change', () => {
+      if (themeToggle.checked) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+      }
+    });
+
+
+    const profileBtn = document.getElementById('profileBtn');
+    const profileDropdown = document.getElementById('profileDropdown');
+    const profileWrap = document.getElementById('profile');
+
+    profileBtn.addEventListener('click', () => { profileDropdown.classList.toggle('open'); });
+    document.addEventListener('click', (e) => { if (!profileWrap.contains(e.target)) profileDropdown.classList.remove('open'); });
+
+    // Animated counters
+    document.querySelectorAll(".circle").forEach(circle => {
+      let target = +circle.getAttribute("data-target"), count = 0, speed = target / 100;
+      let update = setInterval(() => { count += speed; if (count >= target) { count = target; clearInterval(update); } circle.textContent = Math.floor(count); }, 20);
+    });
+
+    // Carousel scroll
+    function scrollCarousel(btn, dir) {
+      const c = btn.parentElement.querySelector('.carousel');
+      c.scrollBy({ left: dir * 200, behavior: 'smooth' });
+    }
+  </script>
+</body>
+
+</html>

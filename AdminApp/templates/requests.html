@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        /* ---------- Theme variables ---------- */
+        :root {
+            --bg: #f5f7fb;
+            --text: #102028;
+            --muted: #6b7280;
+            --card: #ffffff;
+            --sidebar-bg: #0f1724;
+            --accent-start: #7b4397;
+            --accent-end: #dc2430;
+            --sidebar-width: 240px;
+            --sidebar-collapsed: 70px;
+            --glass: rgba(255, 255, 255, 0.06);
+        }
+
+        :root[data-theme='dark'] {
+            --bg: #071021;
+            --text: #e6eef8;
+            --muted: #9aa7bf;
+            --card: #0b1220;
+            --sidebar-bg: #081222;
+            --glass: rgba(255, 255, 255, 0.02);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        
+        }
+
+        /* ---------------- Sidebar ---------------- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--sidebar-bg), #0b1220);
+            color: #fff;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: width .25s ease;
+            box-shadow: 2px 0 8px rgba(2, 6, 23, 0.15);
+            z-index: 50;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed);
+        }
+
+        .sidebar .top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .brand {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 12px 8px;
+            margin: 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin: 6px 6px;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .nav-item i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+        }
+
+        /* ---------------- Main content ---------------- */
+        .main {
+            margin-left: var(--sidebar-width);
+            transition: margin-left .25s ease;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header.topbar {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid rgba(15, 20, 30, 0.04);
+            background: var(--card);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        .page-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* profile dropdown */
+        .profile {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 8px;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            display: grid;
+            place-items: center;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .profile-info #adminName {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .profile-info small {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            right: 0;
+            top: 56px;
+            min-width: 220px;
+            background: var(--card);
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(2, 6, 23, 0.18);
+            display: none;
+            flex-direction: column;
+        }
+
+        .profile-dropdown.open {
+            display: flex;
+        }
+
+        .profile-dropdown a,
+        .profile-dropdown .row {
+            padding: 12px 14px;
+            text-decoration: none;
+            color: var(--text);
+            border-bottom: 1px solid rgba(2, 6, 23, 0.04);
+        }
+
+        .profile-dropdown a:hover {
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            color: #fff;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--accent-start);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px;
+            box-shadow: 0 2px 8px rgba(182, 43, 43, 0.1);
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            text-align: center;
+            border: none;
+        }
+
+        thead tr {
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+        }
+
+        th {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        :root[data-theme='dark'] tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 2px;
+            transition: 0.2s;
+        }
+
+        .approve {
+            background: #28a745;
+            color: white;
+        }
+
+        .approve:hover {
+            background: #218838;
+        }
+
+        .reject {
+            background: #dc3545;
+            color: white;
+        }
+
+        .reject:hover {
+            background: #c82333;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="top">
+            <div class="brand">LMS Admin</div>
+        </div>
+        <ul class="nav-list">
+            <li class="nav-item"><i class="bi bi-speedometer2"></i><span class="nav-text"><a href="{% url 'AdminApp:dashboard' %}"
+                        style="color:white;text-decoration:none;">Dashboard</a></span></li>
+            <li class="nav-item"><i class="bi bi-graph-up"></i><span class="nav-text"><a href="{% url 'AdminApp:analytics' %}"
+                        style="color:white;text-decoration:none;">Analytics</a></span></li>
+            <li class="nav-item"><i class="bi bi-journal-bookmark"></i><span class="nav-text"><a href="{% url 'AdminApp:books' %}"
+                        style="color:white;text-decoration:none;">Books</a></span></li>
+            <li class="nav-item"><i class="bi bi-people"></i><span class="nav-text"><a href="{% url 'AdminApp:members' %}"
+                        style="color:white;text-decoration:none;">Members</a></span></li>
+            <li class="nav-item active"><i class="bi bi-inbox"></i><span class="nav-text"><a href="{% url 'AdminApp:requests'%}"
+                        style="color:white;text-decoration:none;">Requests</a></span></li>
+            <li class="nav-item"><i class="bi bi-clock-history"></i><span class="nav-text"><a href="{% url 'AdminApp:history' %}"
+                        style="color:white;text-decoration:none;">History</a></span></li>
+            <li class="nav-item"><i class="bi bi-receipt"></i><span class="nav-text"><a href="{% url 'AdminApp:ledger' %}"
+                        style="color:white;text-decoration:none;">Ledger</a></span></li>
+        </ul>
+    </aside>
+
+    <!-- MAIN AREA -->
+    <div class="main">
+        <header class="topbar">
+            <h1 class="page-title">Requests</h1>
+            <div class="profile" id="profile">
+                <div id="profileBtn" class="profile-btn">
+                    <div class="avatar">A</div>
+                    <div class="profile-info">
+                        <div id="adminName">Admin</div>
+                        <small>Administrator</small>
+                    </div>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+
+                <div id="profileDropdown" class="profile-dropdown">
+                    <a href="#">Profile</a>
+                    <div class="row">
+                        <span>Appearance</span>
+                        <label class="switch">
+                            <input type="checkbox" id="themeToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <a href="#">Sign Out</a>
+                </div>
+            </div>
+        </header>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Sno</th>
+                    <th>Student Name</th>
+                    <th>Roll No</th>
+                    <th>Book Title</th>
+                    <th>Request Type</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for name in request_book %}
+                <tr>
+                    <td>{{ name.sno }}</td>
+                    <td>{{ name.user.user.Name }}</td>
+                    <td>{{ name.user.Roll_number }}</td>
+                    <td>{{ name.book.Title }}</td>
+                    <td>Issue</td>
+                    <td>{{ name.request_date }}</td>
+                    <td class="status">{{ name.status }}</td>
+
+                    <td>
+                        <button class="btn approve" onclick="approveRequest(this)"><a href="{% url 'AdminApp:approve_request' name.sno %}" style="text-decoration: none;color: white;">Approve</a></button>
+                        <button class="btn reject" onclick="rejectRequest(this)"><a href="{% url 'AdminApp:reject_request' name.sno %}" style="text-decoration: none;color: white;">Reject</a></button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Dark mode toggle
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('change', () => {
+            if (themeToggle.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+        });
+
+        // Profile dropdown
+        const profileBtn = document.getElementById('profileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const profileWrap = document.getElementById('profile');
+
+        profileBtn.addEventListener('click', () => {
+            profileDropdown.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!profileWrap.contains(e.target)) {
+                profileDropdown.classList.remove('open');
+            }
+        });
+
+        // Approve/Reject actions
+        function approveRequest(btn) {
+            let row = btn.closest("tr");
+            let statusCell = row.querySelector(".status");
+            statusCell.innerText = "Approved";
+            disableButtons(row);
+            alert("Book request approved for: " + row.cells[3].innerText);
+        }
+
+        function rejectRequest(btn) {
+            let row = btn.closest("tr");
+            let statusCell = row.querySelector(".status");
+            statusCell.innerText = "Rejected";
+            disableButtons(row);
+            alert("Book request rejected for: " + row.cells[3].innerText);
+        }
+
+        function disableButtons(row) {
+            let buttons = row.querySelectorAll("button");
+            buttons.forEach(btn => btn.disabled = true);
+        }
+        function scrollCarousel(btn, dir) {
+            const c = btn.parentElement.querySelector('.carousel');
+            c.scrollBy({ left: dir * 200, behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>

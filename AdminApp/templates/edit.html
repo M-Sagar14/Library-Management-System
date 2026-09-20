@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Edit Member</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+            background: var(--bg, #f5f7fb);
+            color: var(--text, #102028);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: var(--card, #fff);
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(2,6,23,0.06);
+        }
+
+        h2 {
+            color: var(--accent-start, #7b4397);
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        input[type=text] {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn.save {
+            background: var(--accent-start, #7b4397);
+            color: #fff;
+        }
+
+        .btn.cancel {
+            background: #ccc;
+            color: #000;
+        }
+
+        /* Dark mode */
+        :root[data-theme='dark'] .container {
+            background: var(--card, #0b1220);
+        }
+
+        :root[data-theme='dark'] input[type=text] {
+            background: #15202b;
+            color: #e6eef8;
+            border: 1px solid #333;
+        }
+
+        :root[data-theme='dark'] .btn.cancel {
+            background: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Edit Member</h2>
+        <form id="editMemberForm">
+            <label for="rollNo">Roll Number</label>
+            <input type="text" id="rollNo" name="rollNo" value="21A91A05A1">
+
+            <label for="studentName">Student Name</label>
+            <input type="text" id="studentName" name="studentName" value="X">
+
+            <div class="btn-group">
+                <button type="button" class="btn cancel" onclick="window.history.back();">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </button>
+                <button type="submit" class="btn save">
+                    <i class="bi bi-check-circle"></i> Save
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('editMemberForm');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Member updated successfully!');
+            // In Django, here you would submit the form data via POST
+            // window.location.href = 'members.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Delete Member</title>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .modal {
+            background: var(--card, #fff);
+            padding: 28px;
+            border-radius: 12px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
+        }
+
+        h3 {
+            color: var(--accent-end, #dc2430);
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 24px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn.cancel {
+            background: #ccc;
+            color: #000;
+        }
+
+        .btn.delete {
+            background: var(--accent-end, #dc2430);
+            color: #fff;
+        }
+
+        /* Dark mode */
+        :root[data-theme='dark'] .modal {
+            background: var(--card, #0b1220);
+            color: #e6eef8;
+        }
+
+        :root[data-theme='dark'] .btn.cancel {
+            background: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <div class="modal">
+        <h3>Delete Book</h3>
+        <p>Are you sure you want to delete <strong> : </strong>{{book.Title}}</p>
+        <div class="btn-group">
+            <button class="btn cancel" type="button" onclick="window.history.back();">
+                <i class="bi bi-x-circle"></i> Cancel
+            </button>
+            <button class="btn delete" onclick="alert('Book deleted!'); window.location.href='members.html';" type="submit">
+            
+                <i class="bi bi-trash"></i> Delete 
+            </button>
+        </div>
+    </div>
+    </form>
+</body>
+
+</html>
