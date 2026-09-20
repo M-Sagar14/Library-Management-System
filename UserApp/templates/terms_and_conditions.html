@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMS User - Terms & Conditions</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    :root {
+      --primary-color: #005f73;         
+      --primary-hover: #0b9396;         
+      --active-color: #f48c06;          
+      --background-color: #e8f1f2;      
+      --text-color: #102028;            
+      --sidebar-bg: #0b3d91;            
+    }
+
+    body.dark-mode {
+      --primary-color: #0b1f3a;
+      --primary-hover: #0b3d91;
+      --active-color: #f48c06;
+      --background-color: #121212;
+      --text-color: #f0f0f0;
+      --sidebar-bg: #0b1f3a;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: relative;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      background: linear-gradient(90deg, var(--sidebar-bg), var(--primary-hover));
+      color: white;
+      padding: 0 25px;
+      height: 90px;
+    }
+
+    .navbar h2 {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.8rem;
+      margin: 0;
+    }
+
+    /* Profile dropdown */
+    .profile {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .profile i {
+      font-size: 3rem;
+      transition: transform 0.2s ease;
+    }
+
+    .profile i:hover {
+      transform: scale(1.05);
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 85px;
+      background-color: var(--sidebar-bg);
+      min-width: 190px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .dropdown.active {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dropdown a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      padding: 12px 15px;
+      text-decoration: none;
+      transition: 0.3s;
+      font-size: 0.95rem;
+    }
+
+    .dropdown a:hover {
+      background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 45px;
+      height: 25px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 25px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 17px;
+      width: 17px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(18px);
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+    }
+
+    .sidebar {
+      background-color: var(--sidebar-bg);
+      width: 230px;
+      padding-top: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sidebar button {
+      width: 80%;
+      padding: 15px;
+      margin: 12px 0;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar button:hover {
+      background: linear-gradient(90deg, var(--primary-hover), var(--primary-color));
+      transform: scale(1.05);
+    }
+
+    .sidebar button.active {
+      background: linear-gradient(90deg, var(--active-color), #ffb703);
+      color: #fff;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transform: scale(1.05);
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 25px;
+      overflow-y: auto;
+    }
+
+    .terms {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .terms h2 {
+      color: var(--primary-color);
+    }
+
+    .terms p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+      color: var(--text-color);
+    }
+
+    .terms ul {
+      margin: 10px 0 20px 20px;
+      color: var(--text-color);
+    }
+
+    .terms ul li {
+      margin-bottom: 8px;
+    }
+    .book-card p {
+      font-size: 0.85rem;
+      color: #555;
+      margin: 0;
+    }
+    .sidebar-btn {
+    display: block;
+    width: 85%;
+    padding: 13px 0;
+    margin: 10px auto;
+    border-radius: 10px;
+    background-color: transparent;
+    color: #e0e0e0;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+.sidebar-btn:hover {
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+    color: white;
+    transform: translateX(4px);
+}
+
+
+  </style>
+</head>
+<body>
+    
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <h2>Library Management System</h2>
+    <div class="profile" id="profileMenu">
+      <i class="bi bi-person-circle"></i>
+      <div class="dropdown" id="dropdownMenu">
+        <a href="#">My Profile</a>
+        <a href="#">Settings</a>
+        <a href="#">
+          Dark Mode 
+          <label class="switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider"></span>
+          </label>
+        </a>
+        <a href="#">Logout</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar + Main -->
+  <div class="container">
+    <div class="sidebar">
+      <a href="{% url 'UserApp:dashboard' %}" class="sidebar-btn" >Dashboard</a>
+      <a href="{% url 'UserApp:books_user' %}" class="sidebar-btn" >Books</a>
+      <a href="{% url 'UserApp:history_user' %}" class="sidebar-btn" >History</a>
+      
+      <a href="{% url 'UserApp:guide' %}" class="sidebar-btn" >Guide</a>
+      <a href="{% url 'UserApp:terms' %}" class="sidebar-btn" >Terms & Conditions</a>
+      <a href="{% url 'UserApp:smart' %}" class="sidebar-btn" >Smart AI</a>
+    </div>
+
+    <div class="main-content">
+      <div class="terms">
+        <h2>Terms & Conditions</h2>
+        <p>Welcome to our Library Management System (LMS). Please read these Terms & Conditions carefully before using the system.</p>
+
+        <ul>
+          <li>All users must have a valid library account to access resources.</li>
+          <li>Books must be returned by the due date to avoid fines.</li>
+          <li>Issuing multiple books at once may be subject to limits.</li>
+          <li>Users must respect copyright and not redistribute digital resources illegally.</li>
+          <li>The LMS admin reserves the right to suspend accounts for misuse.</li>
+          <li>Users should update their contact information to maintain account validity.</li>
+          <li>Personal data is handled according to our Privacy Policy.</li>
+          <li>By using the LMS, you agree to comply with all library rules and policies.</li>
+          <li>Only registered students and staff of the institution are eligible to use the Library Management System. Each user must use their own credentials to log in.</li>
+          <li>The LMS respects user privacy and securely stores login and borrowing information.</li>
+          <li>Only registered students and staff of the institution are eligible to use the Library Management System. Each user must use their own credentials to log in.</li>
+          <li>Books may be borrowed for a fixed duration as per library policy. Users must ensure timely return or renewal to avoid penalties.</li>
+          <li>Overdue fines are charged on a per-day basis. <br><strong>Fine Calculation:</strong> Fine = Number of Delayed Days × ₹1</li>
+          <li>If a book is damaged, the user must pay the replacement cost as determined by the library administration.</li>
+          <li>If a book is lost, the user must pay the book cost + ₹100 service charge.</li>
+          <li>Silence must be maintained in the library at all times.</li>
+          <li>Students are responsible for all books issued under their ID.</li>
+          <li>The Smart AI assistant is provided to enhance user experience; however, it may occasionally produce errors.</li>
+        </ul>
+
+        <p>Failure to comply with these terms may result in restricted access or penalties. For any questions, contact library support.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const toggle = document.getElementById('themeToggle');
+    toggle.addEventListener('change', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+
+    const profileMenu = document.getElementById('profileMenu');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    profileMenu.addEventListener('click', (e) => {
+      e.stopPropagation(); 
+      dropdownMenu.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!profileMenu.contains(e.target)) {
+        dropdownMenu.classList.remove('active');
+      }
+    });
+
+    const sidebarButtons = document.querySelectorAll('.sidebar button');
+    sidebarButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        sidebarButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>

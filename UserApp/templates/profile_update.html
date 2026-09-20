@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Created</title>
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display+SC&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* Reset */
+    * {
+      box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #222;
+      user-select: none;
+    }
+
+    /* Glass card */
+    .glass-card {
+      position: relative;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 15px 40px rgba(162, 155, 254, 0.3);
+      padding: 3rem 3.5rem;
+      width: 400px;
+      max-width: 90vw;
+      text-align: center;
+      color: #4a3c75;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    /* Heading */
+    h1 {
+      font-family: 'Playfair Display SC', serif;
+      font-weight: 700;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 8px #a29bffaa;
+    }
+
+    /* Message */
+    p {
+      font-size: 1.15rem;
+      margin-bottom: 2rem;
+      color: #6b5edcdd;
+      font-weight: 600;
+    }
+
+    /* Close button */
+    .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255, 255, 255, 0.35);
+      border-radius: 50%;
+      border: none;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #6b5edc;
+      box-shadow: 0 0 12px #9b8cffaa;
+      transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 1;
+    }
+    .close-btn:hover {
+      background: #6b5edc;
+      color: #fff;
+      transform: rotate(90deg);
+      box-shadow: 0 0 18px #785edd;
+    }
+
+    /* Fade in animation */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="glass-card" role="alert" aria-live="assertive">
+    <button class="close-btn" aria-label="Close and go back" onclick="goBack()">×</button>
+    <h1>Profile Updated!</h1>
+    <p>The profile has been successfully updated.</p>
+  </div>
+
+  <script>
+    function goBack() {
+      // Customize this URL if you want to go somewhere specific
+      window.history.back();
+    }
+  </script>
+</body>
+</html>

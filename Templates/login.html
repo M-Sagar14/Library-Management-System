@@ -1,0 +1,253 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Library Management System</title>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+    :root {
+      --bg-overlay: rgba(20, 0, 45, 0.6);
+      --primary: #4e1088;
+      --accent: #a855f7;
+      --text: #1e1b4b;
+      --card: #ffffff;
+      --radius: 14px;
+      --shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5yGi5EzuqgBuFQUe5x3zSOTVED-GmPGaxGw&s') center/cover no-repeat;
+      z-index: -2;
+      animation: moveBg 40s linear infinite alternate;
+      transform: scale(1.1);
+    }
+
+    body::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--bg-overlay), rgba(40, 0, 90, 0.6));
+      z-index: -1;
+    }
+
+    @keyframes moveBg {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      overflow: hidden;
+      width: 900px;
+      max-width: 95%;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    /* 🎬 Left Card with Animation */
+    .illustration {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      padding: 2rem;
+    }
+
+    .illustration lottie-player {
+      width: 250px;
+      height: 250px;
+      margin-bottom: 1rem;
+    }
+
+    .illustration h1 {
+      font-size: 2rem;
+      margin-bottom: 0.6rem;
+      animation: fadeInUp 1.5s ease forwards;
+    }
+
+    .illustration p {
+      font-size: 1rem;
+      opacity: 0.95;
+      max-width: 300px;
+      animation: fadeInUp 1.8s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 🔹 Right Side (Login Form) */
+    .login-box {
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .login-box h2 {
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: 700;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.25s;
+      background-color: #fff;
+    }
+
+    .input-group label {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%);
+      color: #64748b;
+      pointer-events: none;
+      transition: 0.25s;
+      background: white;
+      padding: 0 0.3rem;
+    }
+
+    .input-group input:focus,
+    .input-group input:valid {
+      border-color: var(--primary);
+    }
+
+    .input-group input:focus+label,
+    .input-group input:valid+label {
+      top: 0;
+      font-size: 0.8rem;
+      color: var(--primary);
+    }
+
+    button {
+      padding: 0.9rem;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(147, 51, 234, 0.3);
+    }
+
+    .extra {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      display: flex;
+      gap: 40px;
+    }
+
+    .extra a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .extra a:hover {
+      text-decoration: underline;
+    }
+
+    @media(max-width: 760px) {
+      .container { grid-template-columns: 1fr; }
+      .illustration { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 🎬 Animated Left Section -->
+    <div class="illustration">
+      <lottie-player
+        src="{% static 'animations/female.json' %}"
+        background="transparent"
+        speed="1"
+        loop
+        autoplay>
+      </lottie-player>
+
+      <h1>Welcome Back!</h1>
+      <p>Access your library account to explore, borrow, and manage your favorite books easily.</p>
+    </div>
+
+    <!-- 🔹 Login Form Section -->
+    <div class="login-box">
+      <h2>Login to Your Account</h2>
+      <form action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        <div class="input-group">
+          <input type="text" id="email" name="username_or_email" required>
+          <label for="email">Username or Email</label>
+        </div>
+
+        <div class="input-group">
+          <input type="password" id="password" name="password" required>
+          <label for="password">Password</label>
+        </div>
+
+        <button type="submit">Login</button>
+
+        <div class="extra">
+          <p><a href="{% url 'create' %}">Create Account</a></p>
+          <p><a href="{% url 'forgot' %}">Forgot Password?</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

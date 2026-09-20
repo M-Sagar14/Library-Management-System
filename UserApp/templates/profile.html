@@ -1,0 +1,227 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Theme Colors */
+        :root {
+            --primary-color: #0b1f3a;
+            --primary-hover: #264b8c;
+            --accent-color: #f48c06;
+            --light-bg: #f8f9fa;
+            --text-color: #222;
+            --card-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode {
+            --primary-color: #0b1f3a;
+            --primary-hover: #264b8c;
+            --accent-color: #f48c06;
+            --light-bg: #1a1a1a;
+            --text-color: #ffffff;
+            --card-bg: #222;
+            --shadow-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            font-family: "Poppins", sans-serif;
+            transition: background 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 15px var(--shadow-color);
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 550px;
+            transition: background 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        /* Header with close button */
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .profile-header h2 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: var(--accent-color);
+            transform: scale(1.2);
+        }
+
+        label {
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .form-control {
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            transition: border 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 5px var(--accent-color);
+        }
+
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Dark Mode */
+        body.dark-mode .profile-header h2 {
+            color: var(--accent-color);
+        }
+
+        body.dark-mode .close-btn {
+            color: #fff;
+        }
+
+        /* Toggle Button */
+        .toggle-btn {
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            background: var(--accent-color);
+            border: none;
+            color: #fff;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background: var(--primary-hover);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dark Mode Toggle -->
+    <button class="toggle-btn" onclick="toggleMode()">🌙 Mode</button>
+
+    <div class="profile-card">
+        <div class="profile-header">
+            <h2>Student Profile</h2>
+            <button class="close-btn" onclick="goBack()">✖</button>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label>Roll Number</label>
+            <input type="text" name="Roll_number" class="form-control"
+                   value="{{ user_details.Roll_number|default:'' }}" required>
+
+            <label>Contact</label>
+            <input type="number" name="Contact" class="form-control"
+                   value="{{ user_details.Contact|default:'' }}">
+
+            <label>Date of Birth</label>
+            <input type="date" name="DOB" class="form-control"
+                   value="{{ user_details.DOB|default:'' }}">
+
+            <label>Gender</label>
+            <select name="Gender" class="form-control">
+                <option value="Male" {% if user_details and user_details.Gender == "Male" %}selected{% endif %}>Male</option>
+                <option value="Female" {% if user_details and user_details.Gender == "Female" %}selected{% endif %}>Female</option>
+                <option value="Other" {% if user_details and user_details.Gender == "Other" %}selected{% endif %}>Other</option>
+            </select>
+
+            <label>Branch</label>
+            <input type="text" name="Branch" class="form-control"
+                   value="{{ user_details.Branch|default:'' }}">
+
+            <label>Course</label>
+            <input type="text" name="Course" class="form-control"
+                   value="{{ user_details.Course|default:'' }}">
+
+            <label>Year of Study</label>
+            <input type="number" name="Year_of_study" class="form-control"
+                   value="{{ user_details.Year_of_Study|default:'' }}">
+
+            <label>Graduation Year</label>
+            <input type="number" name="Graduation_year" class="form-control"
+                   value="{{ user_details.Graduation_Year|default:'' }}">
+
+            <label>Address</label>
+            <input type="text" name="Address" class="form-control"
+                   value="{{ user_details.Address|default:'' }}">
+
+            <button type="submit" class="btn-submit" >
+                {% if profile_exists %}Update{% else %}Submit{% endif %}
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Dark mode toggle
+        function toggleMode() {
+            document.body.classList.toggle("dark-mode");
+            const mode = document.body.classList.contains("dark-mode") ? "dark" : "light";
+            localStorage.setItem("mode", mode);
+        }
+
+        // Load saved mode
+        window.onload = () => {
+            if (localStorage.getItem("mode") === "dark") {
+                document.body.classList.add("dark-mode");
+            }
+        };
+
+        // Go back to dashboard
+        function goBack() {
+            window.location.href = "{% url 'UserApp:dashboard' %}";  // Replace 'dashboard' with your actual URL name
+        }
+    </script>
+
+</body>
+</html>
